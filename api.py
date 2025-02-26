@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Adicionar suporte a CORS (caso esteja bloqueando no Flutter)
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
@@ -26,13 +27,21 @@ def prever_aleatorio(signo, area, emocional):
     previsoes_possiveis = previsoes_str.split(" | ")
     previsao_aleatoria = random.choice(previsoes_possiveis)
 
-    return previsao_aleatoria
+    # 🔹 Forçar UTF-8 na string de saída
+    return previsao_aleatoria.encode("utf-8").decode("utf-8")
 
 # Rota de previsão
 @app.get("/prever")
 def fazer_previsao(signo: str, area: str, emocional: str):
     previsao = prever_aleatorio(signo, area, emocional)
-    return {"signo": signo, "area": area, "emocional": emocional, "previsao": previsao}
+
+    # 🔹 Garantir que toda a resposta está codificada corretamente
+    return {
+        "signo": signo.encode("utf-8").decode("utf-8"),
+        "area": area.encode("utf-8").decode("utf-8"),
+        "emocional": emocional.encode("utf-8").decode("utf-8"),
+        "previsao": previsao
+    }
 
 # Rota raiz
 @app.get("/")

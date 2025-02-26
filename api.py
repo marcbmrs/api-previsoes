@@ -29,7 +29,7 @@ def prever_aleatorio(signo, area, emocional):
     return previsao_aleatoria
 
 # Rota de previsão
-@app.get("/prever/")
+@app.get("/prever")
 def fazer_previsao(signo: str, area: str, emocional: str):
     previsao = prever_aleatorio(signo, area, emocional)
     return {"signo": signo, "area": area, "emocional": emocional, "previsao": previsao}
